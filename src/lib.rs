@@ -46,8 +46,6 @@ mod tests {
   extern crate pretty_assertions;
 
   use super::*;
-  use std::fs::File;
-  use std::io::{BufRead, BufReader};
   use std::path::Path;
   use lazy_static::lazy_static;
   use regex::Regex;
@@ -68,31 +66,6 @@ mod tests {
     return words;
   }
 
-  fn train(data: HashMap<String, Vec<String>>) -> Bayesic {
-    let mut bayesic = Bayesic::new();
-    for (key, value) in data {
-      bayesic.train(key, value)
-    }
-    return bayesic;
-  }
-
-  fn parsed_data_set() -> HashMap<String, Vec<String>> {
-    let path = Path::new("priv/training/imdb_titles.tsv").to_path_buf();
-    let mut hash: HashMap<String, Vec<String>> = HashMap::new();
-    let reader = BufReader::new(File::open(path).unwrap());
-    let mut skip_header = true;
-    for line in reader.lines() {
-      if skip_header {
-        skip_header = false;
-      } else {
-        let o = line.unwrap();
-        let pieces: Vec<&str> = o.split("\t").collect();
-        hash.insert(pieces[0].to_string(), WORDS.find_iter(&pieces[1]).map(|m: regex::Match| String::from(m.as_str())).collect());
-      }
-    }
-    return hash;
-  }
-
   fn trained() -> Bayesic {
     let mut bayesic = Bayesic::new();
     bayesic.train("jojo".to_string(), path_to_words("priv/training/jojo_rabbit"));
@@ -101,11 +74,6 @@ mod tests {
     bayesic.train("jurassic_park_iii".to_string(), path_to_words("priv/training/jurassic_park_iii"));
     bayesic.train("kpax".to_string(), path_to_words("priv/training/kpax"));
     return bayesic;
-  }
-
-  #[test]
-  fn train_large_data_set() {
-    let b = train(parsed_data_set());
   }
 
   #[test]
