@@ -1,15 +1,16 @@
 use std::collections::{HashMap,HashSet};
+use radix_trie::Trie;
 
 pub struct Bayesic {
   classifications: HashSet<String>,
-  by_token: HashMap<String, HashSet<String>>,
+  by_token: Trie<String, HashSet<String>>,
 }
 
 impl Bayesic {
   pub fn new() -> Bayesic {
     Bayesic {
       classifications: HashSet::new(),
-      by_token: HashMap::new(),
+      by_token: Trie::new(),
     }
   }
 
@@ -17,14 +18,14 @@ impl Bayesic {
     let mut probabilities = HashMap::new();
     let num_classes = self.classifications.len() as f64;
     for token in &tokens {
-      if self.by_token.contains_key(token) {
+      if self.by_token.get(token).is_some() {
         let possible_classes = self.by_token.get(token).unwrap();
         for class in possible_classes {
           let prior = 1.0 / num_classes;
           let mut p_klass: f64 = *probabilities.get(class).unwrap_or(&prior);
           let p_not_klass: f64 = 1.0 - p_klass;
           let p_token_given_klass: f64 = 1.0;
-          let num_potential_classes: f64 = self.by_token[token].len() as f64;
+          let num_potential_classes: f64 = self.by_token.get(token).unwrap().len() as f64;
           let p_token_given_not_klass: f64 = (num_potential_classes - 1.0) / num_classes;
           p_klass = (p_token_given_klass * p_klass) / ((p_token_given_klass * p_klass) + (p_token_given_not_klass * p_not_klass));
           probabilities.insert(class.clone(), p_klass);
@@ -36,8 +37,13 @@ impl Bayesic {
 
   pub fn train(&mut self, class: String, tokens: Vec<String>) {
     self.classifications.insert(class.clone());
-    for token in tokens {
-      self.by_token.entry(token).or_insert(HashSet::new()).insert(class.clone());
+    for token in &tokens {
+      match self.by_token.get(token) {
+        Some(_) => None,
+        None           =>
+          self.by_token.insert(token.clone(), HashSet::new()),
+      };
+      self.by_token.get_mut(token).unwrap().insert(class.clone());
     }
   }
 }

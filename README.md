@@ -14,15 +14,15 @@ Here are the current un-optimized results:
 **Classification**
 
 ```
-test large_classify_one_word    ... bench:       4,831 ns/iter (+/- 898)
-test large_classify_three_words ... bench:   1,911,829 ns/iter (+/- 224,408)
-test small_classify_one_word    ... bench:         950 ns/iter (+/- 183)
-test small_classify_three_words ... bench:       2,304 ns/iter (+/- 216)
+test large_classify_one_word    ... bench:      10,442 ns/iter (+/- 740)
+test large_classify_three_words ... bench:   2,781,003 ns/iter (+/- 129,022)
+test small_classify_one_word    ... bench:       1,557 ns/iter (+/- 221)
+test small_classify_three_words ... bench:       3,985 ns/iter (+/- 436)
 ```
 
 **Training**
 
 ```
-test train_large ... bench:  99,597,005 ns/iter (+/- 26,388,979)
-test train_small ... bench:     127,263 ns/iter (+/- 14,402)
+test train_large ... bench: 111,759,760 ns/iter (+/- 7,154,122)
+test train_small ... bench:     218,304 ns/iter (+/- 58,278)
 ```
