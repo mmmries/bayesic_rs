@@ -29,6 +29,7 @@ fn train(data: HashMap<String, Vec<String>>) -> Bayesic {
   for (key, value) in data {
     bayesic.train(key, value)
   }
+  bayesic.prune(0.1);
   return bayesic;
 }
 
@@ -39,6 +40,7 @@ fn small_trained() -> Bayesic {
   bayesic.train("jurassic_park_ii".to_string(), path_to_words("priv/training/jurassic_park_ii"));
   bayesic.train("jurassic_park_iii".to_string(), path_to_words("priv/training/jurassic_park_iii"));
   bayesic.train("kpax".to_string(), path_to_words("priv/training/kpax"));
+  bayesic.prune(0.1);
   return bayesic;
 }
 

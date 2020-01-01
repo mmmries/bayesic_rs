@@ -34,6 +34,11 @@ impl Bayesic {
     return probabilities;
   }
 
+  pub fn prune(&mut self, threshold: f64) {
+    let max_classes = ((self.classifications.len() as f64) * threshold).round() as usize;
+    self.by_token.retain(|_k, set| set.len() <= max_classes );
+  }
+
   pub fn train(&mut self, class: String, tokens: Vec<String>) {
     self.classifications.insert(class.clone());
     for token in tokens {
@@ -116,6 +121,23 @@ mod tests {
     // Other movies have just one of these words so they only get a small boost to probability
     assert!(classification["kpax"] < 0.4);
     assert!(classification["jojo"] < 0.4);
+  }
+
+  #[test]
+  fn multiple_generics_after_pruning() {
+    let mut pruned = trained();
+    pruned.prune(0.3333);
+    let classification = pruned.classify(vec!("a".to_string(), "the".to_string(), "with".to_string()));
+    assert_eq!(classification.keys().len(), 0);
+  }
+
+  #[test]
+  fn key_word_classification_after_pruning() {
+    let mut pruned = trained();
+    pruned.prune(0.3333);
+    let classification = pruned.classify(vec!("Hitler".to_string()));
+    assert!(classification["jojo"] > 0.9);
+    assert_eq!(classification.len(), 1);
   }
 
   #[test]
