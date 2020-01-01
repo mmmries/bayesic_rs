@@ -55,7 +55,8 @@ fn parsed_data_set() -> HashMap<String, Vec<String>> {
     } else {
       let o = line.unwrap();
       let pieces: Vec<&str> = o.split("\t").collect();
-      hash.insert(pieces[0].to_string(), WORDS.find_iter(&pieces[1]).map(|m: regex::Match| String::from(m.as_str())).collect());
+      let tokens = WORDS.find_iter(&pieces[2]).map(|m: regex::Match| String::from(m.as_str())).collect();
+      hash.insert(pieces[0].to_string(), tokens);
     }
   }
   return hash;
@@ -81,9 +82,9 @@ fn large_classify_one_word(bench: &mut Bencher) {
 
 fn large_classify_three_words(bench: &mut Bencher) {
   bench.iter(|| {
+    // including The to simulate a token that has lots of potential matches
     LARGE_TRAINED.classify(vec!("The".to_string(), "Silver".to_string(), "Screen".to_string()));
   })
 }
 benchmark_group!(benches, small_classify_one_word, small_classify_three_words, large_classify_one_word, large_classify_three_words);
-//benchmark_group!(benches, small_classify_one_word, small_classify_three_words);
 benchmark_main!(benches);
