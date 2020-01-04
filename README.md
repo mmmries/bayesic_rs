@@ -1,6 +1,6 @@
 # Bayesic
 
-A string matching library similar to a NaiveBayes classifier, but optimized for use cases where you have many possible matches.
+A string matching library similar to a NaiveBayes classifier, but optimized for use cases where you have many possible categories.
 
 This is especially useful if you have two large lists of names/titles/descriptions to match with each other.
 
