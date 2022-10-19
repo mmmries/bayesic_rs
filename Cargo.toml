@@ -1,12 +1,13 @@
 [package]
 name = "bayesic"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["mmmries <riesmmm@gmail.com>"]
 categories = ["data-structures"]
 keywords = ["bayes", "bayesian", "classification"]
 repository = "https://github.com/mmmries/bayesic_rs"
-edition = "2018"
+edition = "2021"
 license = "MIT"
+description = "A string matching library similar to NaiveBayes but optimized for many small classifications"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
